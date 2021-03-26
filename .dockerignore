@@ -1,0 +1,20 @@
+# Build
+dist
+
+# Reports/Coverages
+reports
+
+# Github
+.github
+.git
+
+# Yarn v2
+.yarn/*
+!.yarn/cache
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# Editors/IDEs
+.idea

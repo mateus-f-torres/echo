@@ -1,0 +1,10 @@
+{
+  "!(.pnp)*.js?(x)|*.ts?(x)": [
+    "eslint --fix",
+    "prettier --write"
+  ],
+  "*.css": [
+    "stylelint --fix",
+    "prettier --write"
+  ]
+}
