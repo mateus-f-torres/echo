@@ -3,6 +3,7 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
+  "ignorePatterns": ["functions/*.js"],
   "env": {
     "browser": true,
     "commonjs": true,
