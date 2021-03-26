@@ -26,7 +26,7 @@ exports.handler = async (event, context) => {
 
     const page = await browser.newPage()
     const url = "https://github.com/mateus-f-torres/echo"
-    await page.goto(event.url || url, {waitUntil: "networkidle2"})
+    await page.goto(event.url || url, {waitUntil: "networkidle0"})
 
     console.log("[LOG]: scraping", url)
     // 1st crawl, looking for Open Graph Protocol meta tags, prefixed with 'og:'
