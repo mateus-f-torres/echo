@@ -28,7 +28,7 @@ exports.handler = async (event, context) => {
     const url = "https://github.com/mateus-f-torres/echo"
     await page.goto(event.url || url, {waitUntil: "networkidle2"})
 
-    console.log("[LOG]: scraping ", url)
+    console.log("[LOG]: scraping", url)
     // 1st crawl, looking for Open Graph Protocol meta tags, prefixed with 'og:'
     const metatags = await page.$$('meta[property^="og:"]')
     const properties = await Promise.all(
@@ -52,7 +52,7 @@ exports.handler = async (event, context) => {
       body: JSON.stringify({error}),
     }
   } finally {
-    console.error("[LOG]: Teardown Chrome Headless")
+    console.log("[LOG]: Teardown Chrome Headless")
     if (browser) await browser.close()
   }
 
