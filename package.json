@@ -1,9 +1,9 @@
 {
-  "name": "barefoot",
-  "version": "5.6.2",
-  "description": "React PWA Kitchen Sink",
+  "name": "echo",
+  "version": "0.0.0",
+  "description": "",
   "author": "mateus-f-torres",
-  "homepage": "https://mateus-f-torres.github.io/barefoot/",
+  "homepage": "https://mateus-f-torres.github.io/echo/",
   "main": "index.js",
   "license": "MIT",
   "private": true,
