@@ -1,7 +1,6 @@
 // @ts-nocheck
 /* eslint import/newline-after-import: 'off' */
 const path = require("path")
-const webpack = require("webpack")
 // HTML
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 // CSS
@@ -11,8 +10,6 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const TerserPlugin = require("terser-webpack-plugin")
 // Compression
 const CompressionPlugin = require("compression-webpack-plugin")
-// Service Worker
-const {InjectManifest} = require("workbox-webpack-plugin")
 // Extras
 const {BundleAnalyzerPlugin} = require("webpack-bundle-analyzer")
 const {CleanWebpackPlugin} = require("clean-webpack-plugin")
@@ -52,16 +49,9 @@ const brotliPlugin = new CompressionPlugin({
   algorithm: "brotliCompress",
   threshold: 0,
   minRatio: 0.8,
-  exclude: "sw.js",
   compressionOptions: {
     level: 11,
   },
-})
-// Service Worker
-const swPlugin = new InjectManifest({
-  swSrc: "./src/sw/sw.js",
-  exclude: [/\.(br|map)$/],
-  dontCacheBustURLsMatching: /\.(woff2|woff|png|ico|txt)$/,
 })
 // Extras
 const analyzerPlugin = new BundleAnalyzerPlugin({
@@ -76,19 +66,11 @@ const cleanUpPlugin = new CleanWebpackPlugin()
 
 const sourceMapsPlugin = new SourceMapDevToolPlugin({
   filename: "sourcemaps/[file].map",
-  exclude: ["sw.js", /runtime\.*\.*/, /vendors\.*\.*/],
+  exclude: [/runtime\.*\.*/, /vendors\.*\.*/],
 })
 
 const copyPlugin = new CopyPlugin({
-  patterns: [
-    {from: "src/assets/logo", to: "logo/"},
-    {from: "src/assets/manifest.json", to: "[name][ext]"},
-  ],
-})
-
-const environmentPlugin = new webpack.DefinePlugin({
-  REVISION: Date.now(),
-  PRODUCTION: process.env.NODE_ENV == "production",
+  patterns: [{from: "src/assets/logo", to: "logo/"}],
 })
 
 const DEFAULT_PORT = 8080
@@ -163,13 +145,7 @@ let configs = {
       },
     ],
   },
-  plugins: [
-    environmentPlugin,
-    cleanUpPlugin,
-    cssPlugin,
-    htmlPlugin,
-    copyPlugin,
-  ],
+  plugins: [cleanUpPlugin, cssPlugin, htmlPlugin, copyPlugin],
   devServer: {
     hot: true,
     compress: true,
@@ -270,14 +246,11 @@ if (process.env.NODE_ENV === "production") {
         },
         {
           test: /\.(jpg|jpeg|png|svg|gif)$/i,
-          // TODO: set file loader options
-          // FIXME: see image-webpack-loader github to correct docker usage
-          use: ["file-loader", "image-webpack-loader"],
+          use: ["file-loader"],
         },
       ],
     },
     plugins: [
-      environmentPlugin,
       sourceMapsPlugin,
       analyzerPlugin,
       cleanUpPlugin,
@@ -285,7 +258,6 @@ if (process.env.NODE_ENV === "production") {
       cssPlugin,
       htmlPlugin,
       copyPlugin,
-      swPlugin,
     ],
     // TODO: refactor for v5
     stats: {

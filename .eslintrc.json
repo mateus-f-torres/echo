@@ -10,10 +10,6 @@
     "node": true,
     "worker": true
   },
-  "globals": {
-    "REVISION": "readonly",
-    "PRODUCTION": "readonly"
-  },
   "plugins": [
     "@typescript-eslint",
     "react"
