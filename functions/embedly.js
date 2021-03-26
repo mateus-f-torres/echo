@@ -11,10 +11,10 @@ exports.handler = async (event, context) => {
       process.env.EMBEDLY_API_KEY
     }`
 
-    console.log("[LOG]: Requesting ", service)
+    console.log("[LOG]: requesting", service)
     data = await request(service)
   } catch (error) {
-    console.error("[ERROR]: Something went wrong, ", error)
+    console.error("[ERROR]: something went wrong,", error)
     return {
       statusCode: 500,
       body: JSON.stringify(error),

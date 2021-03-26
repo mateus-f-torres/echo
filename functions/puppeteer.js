@@ -13,7 +13,7 @@ exports.handler = async (event, context) => {
   // make a initial skeleton of the main properties needed to generate a link preview
   const skeleton = Object.fromEntries(PROPERTIES.map((p) => [p, null]))
 
-  console.log("[LOG]: Setup Chrome Headless")
+  console.log("[LOG]: setup chrome headless")
   try {
     const executablePath = await chromium.executablePath
 
@@ -46,13 +46,13 @@ exports.handler = async (event, context) => {
       Object.assign(data, alternatives)
     }
   } catch (error) {
-    console.error("[ERROR]: Something went wrong during execution, ", error)
+    console.error("[ERROR]: something went wrong during execution, ", error)
     return {
       statusCode: 500,
       body: JSON.stringify({error}),
     }
   } finally {
-    console.log("[LOG]: Teardown Chrome Headless")
+    console.log("[LOG]: teardown chrome headless")
     if (browser) await browser.close()
   }
 
