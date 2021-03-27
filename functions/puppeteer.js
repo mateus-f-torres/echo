@@ -9,8 +9,7 @@ const PROPERTIES = [TITLE, DESCR, IMAGE]
 exports.handler = async (event, context) => {
   let browser
   let data
-  console.log(event)
-  const url = event.url
+  const url = event.body.url
 
   // make a initial skeleton of the main properties needed to generate a link preview
   const skeleton = Object.fromEntries(PROPERTIES.map((p) => [p, null]))
