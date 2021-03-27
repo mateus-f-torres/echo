@@ -1,3 +1,3 @@
-export const EMBEDLY = "/netlify/functions/embedly"
-export const IFRAMELY = "/netlify/functions/iframely"
-export const PUPPETEER = "/netlify/functions/puppeteer"
+export const EMBEDLY = "/api/embedly"
+export const IFRAMELY = "/api/iframely"
+export const PUPPETEER = "/api/puppeteer"
