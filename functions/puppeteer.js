@@ -7,9 +7,9 @@ const DESCR = "og:description"
 const PROPERTIES = [TITLE, DESCR, IMAGE]
 
 exports.handler = async (event, context) => {
+  const url = JSON.parse(event.body).url
   let browser
   let data
-  const url = event.body.url
 
   // make a initial skeleton of the main properties needed to generate a link preview
   const skeleton = Object.fromEntries(PROPERTIES.map((p) => [p, null]))

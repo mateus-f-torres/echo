@@ -1,17 +1,15 @@
 const fetch = require("node-fetch")
 
+const IFRAMELY_API_KEY = process.env.IFRAMELY_API_KEY
 const IFRAMELY_API = "http://iframe.ly/api/oembed?"
 
 exports.handler = async (event, context) => {
+  const url = JSON.parse(event.body).url
   let data
 
   try {
-    const url = "https://github.com/mateus-f-torres/echo"
-    const service = `${IFRAMELY_API}url=${event.url || url}&api_key=${
-      process.env.IFRAMELY_API_KEY
-    }`
-
-    console.log("[LOG]: requesting", service)
+    console.log("[LOG]: requesting", url)
+    const service = `${IFRAMELY_API}url=${url}&api_key=${IFRAMELY_API_KEY}`
     data = await request(service)
   } catch (error) {
     console.error("[ERROR]: something went wrong,", error)
