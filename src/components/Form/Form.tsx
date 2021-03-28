@@ -1,41 +1,27 @@
 import React, {FormEvent} from "react"
-import request from "../../utils/request"
-import * as APIs from "../../utils/urls"
 
 interface FormInterface extends HTMLFormElement {
   url: HTMLInputElement
 }
 
-function Form(): React.ReactElement {
+interface FormProps {
+  handleSubmit: (url: string) => void
+}
+
+function Form(props: FormProps): React.ReactElement {
   const ref = React.useRef<FormInterface>(null)
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
-    if (ref.current === null) return
-    event.preventDefault()
-
-    const url = ref.current.url.value
-
-    try {
-      request(APIs.PUPPETEER, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({url}),
-      }).then(console.log, console.error)
-    } catch (e) {
-      console.error(e)
+  async function _onSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
+    if (ref.current !== null) {
+      event.preventDefault()
+      props.handleSubmit(ref.current.url.value)
+      ref.current.reset()
     }
-
-    ref.current.reset()
   }
 
   return (
-    <form ref={ref} noValidate onSubmit={handleSubmit} className="mt-8">
-      <label htmlFor="url">Speak an URL</label>
-      <input
-        id="url"
-        type="text"
-        placeholder="https://github.com/mateus-f-torres/echo"
-      />
+    <form ref={ref} noValidate onSubmit={_onSubmit} className="mt-8">
+      <input id="url" type="text" placeholder="Give me an URL" />
     </form>
   )
 }
