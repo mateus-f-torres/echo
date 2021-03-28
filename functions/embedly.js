@@ -1,17 +1,15 @@
 const fetch = require("node-fetch")
 
+const EMBEDLY_API_KEY = process.env.EMBEDLY_API_KEY
 const EMBEDLY_API = "https://api.embedly.com/1/oembed?"
 
 exports.handler = async (event, context) => {
+  const url = JSON.parse(event.body).url
   let data
 
   try {
-    const url = "https://github.com/mateus-f-torres/echo"
-    const service = `${EMBEDLY_API}url=${event.url || url}&key=${
-      process.env.EMBEDLY_API_KEY
-    }`
-
-    console.log("[LOG]: requesting", service)
+    console.log("[LOG]: requesting", url)
+    const service = `${EMBEDLY_API}url=${url}&key=${EMBEDLY_API_KEY}`
     data = await request(service)
   } catch (error) {
     console.error("[ERROR]: something went wrong,", error)

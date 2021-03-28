@@ -1,1 +1,3 @@
-export const RANDOM_ANSWER = "https://yesno.wtf/api"
+export const EMBEDLY = "/api/embedly"
+export const IFRAMELY = "/api/iframely"
+export const PUPPETEER = "/api/puppeteer"
