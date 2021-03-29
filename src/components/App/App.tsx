@@ -1,5 +1,8 @@
 import React from "react"
+
 import Form from "../Form/Form"
+import Cards from "../Cards/Cards"
+
 import * as APIs from "../../utils/urls"
 import request from "../../utils/request"
 
@@ -33,6 +36,7 @@ function App(): React.ReactElement {
         ECHO
       </h1>
       <Form handleSubmit={requestUrlScrape} />
+      <Cards data={data} />
     </div>
   )
 }

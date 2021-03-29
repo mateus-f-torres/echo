@@ -9,7 +9,7 @@ exports.handler = async (event, context) => {
 
   try {
     console.log("[LOG]: requesting", url)
-    const service = `${EMBEDLY_API}url=${url}&key=${EMBEDLY_API_KEY}`
+    const service = `${EMBEDLY_API}url=${url}&key=${EMBEDLY_API_KEY}&maxwidth=512`
     data = await request(service)
   } catch (error) {
     console.error("[ERROR]: something went wrong,", error)
@@ -18,6 +18,9 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(error),
     }
   }
+
+  // sign data for this demo
+  data.api = "embedly"
 
   return {
     statusCode: 200,

@@ -21,7 +21,11 @@ function Form(props: FormProps): React.ReactElement {
 
   return (
     <form ref={ref} noValidate onSubmit={_onSubmit} className="mt-8">
-      <input id="url" type="text" placeholder="Give me an URL" />
+      <input
+        id="url"
+        type="text"
+        className="mx-auto block border-blue-400 border-2 rounded px-2 py-1"
+      />
     </form>
   )
 }

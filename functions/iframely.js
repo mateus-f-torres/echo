@@ -9,7 +9,7 @@ exports.handler = async (event, context) => {
 
   try {
     console.log("[LOG]: requesting", url)
-    const service = `${IFRAMELY_API}url=${url}&api_key=${IFRAMELY_API_KEY}`
+    const service = `${IFRAMELY_API}url=${url}&api_key=${IFRAMELY_API_KEY}&iframe=1&omit_script=1`
     data = await request(service)
   } catch (error) {
     console.error("[ERROR]: something went wrong,", error)
@@ -18,6 +18,9 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(error),
     }
   }
+
+  // sign data for this demo
+  data.api = "iframely"
 
   return {
     statusCode: 200,
