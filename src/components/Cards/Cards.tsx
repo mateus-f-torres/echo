@@ -6,6 +6,16 @@ function Cards(props: any): React.ReactElement {
       {
         // @ts-expect-error
         props.data.map((d, i) => {
+          if (typeof d.message === "string") {
+            return (
+              <li key={i}>
+                <h2 className="mb-2 font-body text-2xl font-bold text-red-400 capitalize">
+                  {d.message}
+                </h2>
+              </li>
+            )
+          }
+
           const key = d.api.concat(i)
           return (
             <li key={key} className="mb-8">

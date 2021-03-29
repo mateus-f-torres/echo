@@ -10,22 +10,21 @@ function App(): React.ReactElement {
   const [data, setData] = React.useState([])
 
   async function requestUrlScrape(url: string): Promise<void> {
-    try {
-      const newData = await Promise.all(
-        Object.values(APIs).map(
-          async (api) =>
-            await request(api, {
-              method: "POST",
-              headers: {"Content-Type": "application/json"},
-              body: JSON.stringify({url}),
-            })
-        )
+    const newData = await Promise.allSettled(
+      Object.values(APIs).map(
+        async (api) =>
+          await request(api, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({url}),
+          })
       )
       // @ts-expect-error
-      setData([...data, ...newData])
-    } catch (e) {
-      console.error(e)
-    }
+    ).then((promises) =>
+      promises.map((p) => (p.value !== undefined ? p.value : p.reason))
+    )
+    // @ts-expect-error
+    setData([...data, ...newData])
   }
 
   console.log(data)
