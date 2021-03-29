@@ -19,8 +19,8 @@ function App(): React.ReactElement {
             body: JSON.stringify({url}),
           })
       )
-      // @ts-expect-error
     ).then((promises) =>
+      // @ts-expect-error
       promises.map((p) => (p.value !== undefined ? p.value : p.reason))
     )
     // @ts-expect-error
