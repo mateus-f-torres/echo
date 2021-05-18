@@ -1,0 +1,5 @@
+# foo-echo-apple=apple
+# foo-echo-grape=grape
+foo-echo-orange=orange
+foo-echo-banana=banana
+# foo-echo-pineapple=pineapple
