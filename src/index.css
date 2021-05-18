@@ -32,6 +32,7 @@ button,
 /* example usage of custom-properties */
 :root {
   --regal-blue: #243c5a;
+  --dialog-green: #1d9635;
 }
 
 /* stylelint-disable-next-line */

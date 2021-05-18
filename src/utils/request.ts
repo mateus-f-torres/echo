@@ -1,7 +1,4 @@
-async function request(
-  url: string,
-  options = {method: "GET"}
-): Promise<unknown> {
+async function request(url: string, options: any): Promise<unknown> {
   const res = await fetch(url, options)
   if (!res.ok) {
     throw new Error("HTTP request error, ".concat(String(res.status)))
