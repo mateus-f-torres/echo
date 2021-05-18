@@ -1,9 +1,9 @@
 const chromium = require("chrome-aws-lambda")
 const puppeteer = require("puppeteer-core")
 
-const TITLE = "og:title"
-const IMAGE = "og:image"
-const DESCR = "og:description"
+const TITLE = "title"
+const IMAGE = "image"
+const DESCR = "description"
 const PROPERTIES = [TITLE, DESCR, IMAGE]
 
 exports.handler = async (event, context) => {
@@ -43,7 +43,9 @@ exports.handler = async (event, context) => {
       console.log("[WARN]: searching for alternatives")
       // 2nd crawl, looking for alternatives in the HTML
       const alternatives = await page.evaluate(getMetaAlternatives)
-      Object.assign(data, alternatives)
+      for (const p of PROPERTIES) {
+        data[p] || (data[p] = alternatives[p])
+      }
     }
   } catch (error) {
     console.error("[ERROR]: something went wrong during execution, ", error)
@@ -56,6 +58,9 @@ exports.handler = async (event, context) => {
     if (browser) await browser.close()
   }
 
+  // sign data for this demo
+  data.api = "puppeteer"
+
   return {
     statusCode: 200,
     body: JSON.stringify(data),
@@ -63,7 +68,8 @@ exports.handler = async (event, context) => {
 }
 
 function getMeta(el) {
-  return [el.getAttribute("property"), el.getAttribute("content")]
+  // character position 3 is the end of the Open Graph meta prefix "og:"
+  return [el.getAttribute("property").slice(3), el.getAttribute("content")]
 }
 
 function hasMissingProperty(obj) {
@@ -90,8 +96,8 @@ function getMetaAlternatives() {
     Boolean(p.innerText.trim())
   ).innerText
   return {
-    ["alt:title"]: titleName,
-    ["alt:image"]: imageLink,
-    ["alt:description"]: firstParagraphWithText,
+    [TITLE]: titleName,
+    [IMAGE]: imageLink,
+    [DESCR]: firstParagraphWithText,
   }
 }

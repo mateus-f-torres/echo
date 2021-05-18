@@ -17,6 +17,7 @@ module.exports = {
       },
       colors: {
         "regal-blue": "var(--regal-blue)",
+        "dialog-green": "var(--dialog-green)",
       },
     },
   },
