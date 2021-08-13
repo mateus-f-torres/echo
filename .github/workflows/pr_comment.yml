@@ -12,6 +12,6 @@ jobs:
     steps:
       - run: |
           echo "Comment on PR#${{ github.event.issue.number }}"
-          echo "${{ github.event.issue }}"
-          echo "${{ github.event.issue.comment }}"
+          echo "${{ toJson(github.event.issue) }}"
+          echo "${{ toJson(github.event) }}
       
