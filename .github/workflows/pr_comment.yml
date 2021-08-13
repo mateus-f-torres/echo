@@ -6,7 +6,7 @@ on:
 jobs:
   pr_commented:
     name: PR comment
-    if: ${{ github event.issue.pull_request }}
+    if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-lates
     steps:
       - run: |
