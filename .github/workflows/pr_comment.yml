@@ -13,9 +13,11 @@ jobs:
       - name: Check Comment
         if: ${{ contains(github.event.comment.body, '@mateus-f-torres') }}
         run: |
-          echo "$(git show)"
+          echo "$GITHUB_ACTOR"
+          echo "$GITHUB_SHA"
           echo "Comment on PR#${{ github.event.issue.number }}"
           echo "${{ toJson(github.event.comment) }}"
           echo "${{ toJson(github.event.issue) }}"
+          echo "${{ toJson(github) }}"
 
       
