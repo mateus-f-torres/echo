@@ -10,7 +10,10 @@ jobs:
     if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
-      - run: |
+      - name: Check Comment
+        if: ${{ contains(github.event.comment.body, '@mateus-f-torres') }}
+        run: |
+          echo "$(git show)"
           echo "Comment on PR#${{ github.event.issue.number }}"
           echo "${{ toJson(github.event.comment) }}"
           echo "${{ toJson(github.event.issue) }}"
