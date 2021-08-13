@@ -1,5 +1,5 @@
 name: Check PR Comment Body
-#          echo "Comment on PR#${{ github.event.issue.number }}"
+# echo "${{ toJson(github.event) }}"
 on:
   issue_comment:
     types: [created]
@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "${{ toJson(github.event) }}"
+          echo "Comment on PR#${{ github.event.issue.number }}"
+          echo "${{ toJson(github.event.comment) }}"
+          echo "${{ toJson(github.event.issue) }}"
 
       
