@@ -1,0 +1,15 @@
+name: Check PR Comment Body
+
+on:
+  issue_comment:
+
+jobs:
+  pr_commented:
+    name: PR comment
+    if: ${{ github event.issue.pull_request }}
+    runs-on: ubuntu-lates
+    steps:
+      - run: |
+          echo "Comment on PR#${{ github.event.issue.number }}"
+          echo "${{ github.event.issue }}
+      
