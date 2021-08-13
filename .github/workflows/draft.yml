@@ -1,0 +1,15 @@
+name: Draft Action
+
+on:
+  pull_request:
+    types: [ready_for_review]
+
+jobs:
+  draft:
+    name: PR Review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Event
+        run: echo "${{ toJson(github) }}"
+
+      
