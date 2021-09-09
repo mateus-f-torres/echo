@@ -1,5 +1,5 @@
 #!/bin/bash
-# skip
+# skip pt. 2
 image_name="echo"
 local_port="$(test -n "$1" && echo "$1" || echo "8080")"
 
