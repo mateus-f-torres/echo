@@ -20,7 +20,7 @@ jobs:
           git show
           echo "${{ toJson(github) }}"
       - name: Check PR source ref
-        if: ${{ startsWith(github.head_ref, 'ci/') }}
+        if: ${{ startsWith(github.head_ref, 'deploy/') }}
         run: |
           echo "${{ github.head_ref }}"
 
