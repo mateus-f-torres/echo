@@ -1,5 +1,7 @@
 name: Draft Action
 
+# foobar
+
 on:
   workflow_dispatch:
   pull_request:
