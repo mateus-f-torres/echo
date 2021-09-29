@@ -19,5 +19,8 @@ jobs:
         run: |
           git show
           echo "${{ toJson(github) }}"
+      - name: Check Draft
+        if: ${{ github.event.pull_request.draft == true }}
+        run: echo "This PR is a draft"
 
       
