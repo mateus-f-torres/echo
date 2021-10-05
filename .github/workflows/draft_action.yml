@@ -2,9 +2,8 @@ name: Draft Action
 
 on:
   workflow_dispatch:
-  pull_request:
-    branches:
-      - master
+  schedule:
+    - cron:  "0 3 * * 3" # minute hour day_of_month (1-31) month (1-12) day_of_week (0-6)
 
 jobs:
   draft_action:
@@ -19,5 +18,10 @@ jobs:
         run: |
           git show
           echo "${{ toJson(github) }}"
+      - name: Get HEAD sha1
+        run: |
+          curl --fail --request GET 'https://api.github.com/repos/mateus-f-torres/echo/git/ref/heads/master' \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Content-Type: application/json'
 
       
