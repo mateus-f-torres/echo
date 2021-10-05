@@ -27,10 +27,10 @@ jobs:
           echo "::set-output name=sha::$(cat sha.txt)"
       - name: Create new branch
         run: |
-          data=$(cat <<OEF
+          data=$(cat <<EOF
           {
             "ref": "refs/heads/foobar",
-            "sha": "${{ steps.master-sha.outputs.sha }}"
+            "sha": ${{ steps.master-sha.outputs.sha }}
           }
           EOF
           )
