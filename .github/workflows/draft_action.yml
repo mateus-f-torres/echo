@@ -19,9 +19,25 @@ jobs:
           git show
           echo "${{ toJson(github) }}"
       - name: Get HEAD sha1
+        id: master-sha
         run: |
           curl --fail --request GET 'https://api.github.com/repos/mateus-f-torres/echo/git/ref/heads/master' \
             --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Content-Type: application/json' | jq '.object.sha'
+            --header 'Content-Type: application/json' | jq '.object.sha' > sha.txt
+          echo "::set-output name=sha::$(cat sha.txt)"
+      - name: Create new branch
+        run: |
+          data=$(cat <<OEF
+          {
+            "ref": "refs/heads/foobar",
+            "sha": "${{ steps.master-sha.outputs.sha }}"
+          }
+          EOF
+          )
+          
+          curl --fail --request POST 'https://api.github.com/repos/mateus-f-torres/echo/git/refs' \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Content-Type: application/json' \
+            --data "$data"
 
       
