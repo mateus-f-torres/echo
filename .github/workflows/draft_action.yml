@@ -22,6 +22,6 @@ jobs:
         run: |
           curl --fail --request GET 'https://api.github.com/repos/mateus-f-torres/echo/git/ref/heads/master' \
             --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Content-Type: application/json' | jq
+            --header 'Content-Type: application/json' | jq '.object.sha'
 
       
