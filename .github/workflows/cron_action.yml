@@ -1,0 +1,17 @@
+name: Cron Action
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron:  "0 3 * * 3" # minute hour day_of_month (1-31) month (1-12) day_of_week (0-6)
+
+jobs:
+  create_branch:
+    name: Create Branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get HEAD sha1
+        run: |
+          curl --fail --request GET 'https://api.github.com/repos/mateus-f-torres/echo/git/ref/heads/master' \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Content-Type: application/json'
