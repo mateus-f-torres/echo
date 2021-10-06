@@ -3,17 +3,16 @@ name: Draft Action
 on:
   workflow_dispatch:
   schedule:
-    - cron:  "0 3 * * 3" # minute hour day_of_month (1-31) month (1-12) day_of_week (0-6)
+    # minute hour day_of_month (1-31) month (1-12) day_of_week (0-6)
+    # 3 UTC = 0 Brasilia Time
+    # 3 weekday = wednsday
+    - cron:  "45 12 * * 3"
 
 jobs:
   draft_action:
     name: PR Review
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
       - name: Check Event
         run: |
           git show
@@ -29,7 +28,7 @@ jobs:
         run: |
           data=$(cat <<EOF
           {
-            "ref": "refs/heads/foobar",
+            "ref": "refs/heads/bazzoka",
             "sha": ${{ steps.master-sha.outputs.sha }}
           }
           EOF
@@ -37,7 +36,6 @@ jobs:
           
           curl --fail --request POST 'https://api.github.com/repos/mateus-f-torres/echo/git/refs' \
             --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' \
-            --data "$data"
-
-      
+            --data "$data"     
