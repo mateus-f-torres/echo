@@ -13,10 +13,6 @@ jobs:
     name: PR Review
     runs-on: ubuntu-latest
     steps:
-      - name: Check Event
-        run: |
-          git show
-          echo "${{ toJson(github) }}"
       - name: Get HEAD sha1
         id: master-sha
         run: |
