@@ -1,0 +1,36 @@
+name: Cron Action
+
+on:
+  schedule:
+    # minute hour day_of_month (1-31) month (1-12) day_of_week (0-6)
+    # 3 UTC = 0 Brasilia Time
+    # 3 weekday = wednsday
+    - cron:  "0 14 * * 4"
+
+jobs:
+  draft_action:
+    name: PR Review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get HEAD sha1
+        id: master-sha
+        run: |
+          curl --fail --request GET 'https://api.github.com/repos/mateus-f-torres/echo/git/ref/heads/master' \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Content-Type: application/json' | jq '.object.sha' > sha.txt
+          echo "::set-output name=sha::$(cat sha.txt)"
+      - name: Create new branch
+        run: |
+          data=$(cat <<EOF
+          {
+            "ref": "refs/heads/bazzoka",
+            "sha": ${{ steps.master-sha.outputs.sha }}
+          }
+          EOF
+          )
+          
+          curl --fail --request POST 'https://api.github.com/repos/mateus-f-torres/echo/git/refs' \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
+            --header 'Content-Type: application/json' \
+            --data "$data"     
