@@ -2,32 +2,12 @@ name: Cron Action
 
 on:
   schedule:
-    - cron:  '30 14 * * *'
+    - cron:  '*/10 * * * *'
 
 jobs:
   draft_action:
-    name: PR Review
+    name: Test Cron
     runs-on: ubuntu-latest
     steps:
       - name: Get HEAD sha1
-        id: master-sha
-        run: |
-          curl --fail --request GET 'https://api.github.com/repos/mateus-f-torres/echo/git/ref/heads/master' \
-            --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Content-Type: application/json' | jq '.object.sha' > sha.txt
-          echo "::set-output name=sha::$(cat sha.txt)"
-      - name: Create new branch
-        run: |
-          data=$(cat <<EOF
-          {
-            "ref": "refs/heads/bazzoka",
-            "sha": ${{ steps.master-sha.outputs.sha }}
-          }
-          EOF
-          )
-          
-          curl --fail --request POST 'https://api.github.com/repos/mateus-f-torres/echo/git/refs' \
-            --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
-            --header 'Content-Type: application/json' \
-            --data "$data"     
+        run: echo "Hello World"
