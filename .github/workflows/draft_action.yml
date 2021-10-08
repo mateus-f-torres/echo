@@ -23,6 +23,7 @@ jobs:
         id: release-branch
         run: |
           branch=$(echo "release/$(date +%y-%m-%d)")
+          
           data=$(cat <<EOF
           {
             "ref": "refs/heads/$branch",
@@ -39,11 +40,12 @@ jobs:
           echo "::set-output name=name::$branch"
 
   release_pr:
-    if: ${{ needs.copy_deploy.outputs.release-branch != null }}
     needs: copy_deploy
     name: Release Pull Request
     runs-on: ubuntu-latest
+    if: ${{ needs.copy_deploy.outputs.release-branch != null }}
     steps:
+      - name: Enable QA envs
       - uses: actions/checkout@v2
         with:
           ref: ${{ needs.copy_deploy.outputs.release-branch }}
@@ -55,5 +57,24 @@ jobs:
           git add .
           git commit -m "generated"
           git push
+          
+      - name: Open Pull Request
+      - run: |
+          data=$(cat <<EOF
+          {
+            "title": "Example Pull Request",
+            "head": ${{ needs.copy_deploy.outputs.release-branch }},
+            "base": "master",
+            "body": "This pull request was created via Github API"
+          }
+          EOF
+          )
+          
+          curl --fail --request POST 'https://api.github.com/repos/mateus-f-torres/echo/pulls' \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
+            --header 'Content-Type: application/json' \
+            --data "$data"
+        
 
       
