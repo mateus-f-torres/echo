@@ -65,7 +65,7 @@ jobs:
           data=$(cat <<EOF
           {
             "title": "Example Pull Request",
-            "head": ${{ needs.copy_deploy.outputs.release-branch }},
+            "head": "${{ needs.copy_deploy.outputs.release-branch }}",
             "base": "master",
             "body": "This pull request was created via Github API"
           }
