@@ -50,33 +50,33 @@ jobs:
         with:
           ref: ${{ needs.copy_deploy.outputs.release-branch }}
           
-      - name: Enable QA envs
-      - run: |
-          echo ${{ needs.copy_deploy.outputs.release-branch }}
-          date > generated.txt
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add .
-          git commit -m "generated"
-          git push
+#      - name: Enable QA envs
+#      - run: |
+#          echo ${{ needs.copy_deploy.outputs.release-branch }}
+#          date > generated.txt
+#          git config user.name github-actions
+#          git config user.email github-actions@github.com
+#          git add .
+#          git commit -m "generated"
+#          git push
           
-      - name: Open Pull Request
-      - run: |
-          data=$(cat <<EOF
-          {
-            "title": "Example Pull Request",
-            "head": ${{ needs.copy_deploy.outputs.release-branch }},
-            "base": "master",
-            "body": "This pull request was created via Github API"
-          }
-          EOF
-          )
+#      - name: Open Pull Request
+#      - run: |
+#          data=$(cat <<EOF
+#          {
+ #           "title": "Example Pull Request",
+ #           "head": ${{ needs.copy_deploy.outputs.release-branch }},
+ #           "base": "master",
+ #           "body": "This pull request was created via Github API"
+ #         }
+ #         EOF
+ #         )
           
-          curl --fail --request POST 'https://api.github.com/repos/mateus-f-torres/echo/pulls' \
-            --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
-            --header 'Content-Type: application/json' \
-            --data "$data"
+#          curl --fail --request POST 'https://api.github.com/repos/mateus-f-torres/echo/pulls' \
+#            --header 'Accept: application/vnd.github.v3+json' \
+#            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
+#            --header 'Content-Type: application/json' \
+#            --data "$data"
         
 
       
