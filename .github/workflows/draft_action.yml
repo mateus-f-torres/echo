@@ -45,7 +45,6 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ needs.copy_deploy.outputs.release-branch != null }}
     steps:
-      - name: Checkout Release
       - uses: actions/checkout@v2
         with:
           ref: ${{ needs.copy_deploy.outputs.release-branch }}
