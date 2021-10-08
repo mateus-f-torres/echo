@@ -15,13 +15,11 @@ jobs:
       - name: Get Deploy SHA1
         id: master-sha
         run: |
-          curl --fail --request GET 'https://api.github.com/repos/mateus-f-torres/echo/ref/heads/master' \
+          curl --fail --request GET 'https://api.github.com/repos/mateus-f-torres/echo/git/ref/heads/master' \
             --header 'Accept: application/vnd.github.v3+json' \
             --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' | jq '.object.sha' > sha.txt
-          test $(cat sha.txt) \
-            && echo "::set-output name=sha::$(cat sha.txt)" \
-            || echo "::error::Failed to get HEAD SHA1" && exit 1
+          echo "::set-output name=sha::$(cat sha.txt)"
 
       - name: Create Weekly Release Branch
         id: release-sha
