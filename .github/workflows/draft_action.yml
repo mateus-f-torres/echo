@@ -8,7 +8,7 @@ jobs:
     name: Copy Deploy to Release
     runs-on: ubuntu-latest
     outputs:
-      release-sha: ${{ steps.release-sha.outputs.sha }}
+      release-branch: ${{ steps.release-branch.outputs.name }}
     steps:
       - name: Get Deploy SHA1
         id: master-sha
@@ -20,11 +20,12 @@ jobs:
           echo "::set-output name=sha::$(cat sha.txt)"
 
       - name: Create Weekly Release Branch
-        id: release-sha
+        id: release-branch
         run: |
+          branch=$(echo "release/$(date +%y-%m-%d)")
           data=$(cat <<EOF
           {
-            "ref": "refs/heads/release/$(date +%y-%m-%d)",
+            "ref": "refs/heads/$branch",
             "sha": ${{ steps.master-sha.outputs.sha }}
           }
           EOF
@@ -34,20 +35,20 @@ jobs:
             --header 'Accept: application/vnd.github.v3+json' \
             --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' \
-            --data "$data" | jq '.object.sha' > sha.txt
-          echo "::set-output name=sha::$(cat sha.txt)"
+            --data "$data"
+          echo "::set-output name=name::$branch"
 
   release_pr:
-    if: ${{ needs.copy_deploy.outputs.release-sha != null }}
+    if: ${{ needs.copy_deploy.outputs.release-branch != null }}
     needs: copy_deploy
     name: Release Pull Request
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ fromJSON(needs.copy_deploy.outputs.release-sha) }}
+          ref: ${{ needs.copy_deploy.outputs.release-branch }}
       - run: |
-          echo ${{ needs.copy_deploy.outputs.release-sha }}
+          echo ${{ needs.copy_deploy.outputs.release-branch }}
           date > generated.txt
           git config user.name github-actions
           git config user.email github-actions@github.com
