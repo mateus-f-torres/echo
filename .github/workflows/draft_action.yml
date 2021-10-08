@@ -34,7 +34,7 @@ jobs:
 
           curl --fail --request POST 'https://api.github.com/repos/criticalmassbr/dialog-pwa/git/refs' \
             --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' \
             --data "$data" | jq '.object.sha' > sha.txt
           echo "::set-output name=sha::$(cat sha.txt)"
