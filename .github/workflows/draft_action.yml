@@ -45,10 +45,12 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ needs.copy_deploy.outputs.release-branch != null }}
     steps:
-      - name: Enable QA envs
+      - name: Checkout Release
       - uses: actions/checkout@v2
         with:
           ref: ${{ needs.copy_deploy.outputs.release-branch }}
+          
+      - name: Enable QA envs
       - run: |
           echo ${{ needs.copy_deploy.outputs.release-branch }}
           date > generated.txt
