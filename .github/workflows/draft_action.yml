@@ -15,7 +15,7 @@ jobs:
       - name: Get Deploy SHA1
         id: master-sha
         run: |
-          curl --fail --request GET 'https://api.github.com/repos/criticalmassbr/dialog-pwa/git/ref/heads/master' \
+          curl --fail --request GET 'https://api.github.com/repos/mateus-f-torres/echo/ref/heads/master' \
             --header 'Accept: application/vnd.github.v3+json' \
             --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' | jq '.object.sha' > sha.txt
@@ -32,7 +32,7 @@ jobs:
           EOF
           )
 
-          curl --fail --request POST 'https://api.github.com/repos/criticalmassbr/dialog-pwa/git/refs' \
+          curl --fail --request POST 'https://api.github.com/repos/mateus-f-torres/echo/git/refs' \
             --header 'Accept: application/vnd.github.v3+json' \
             --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' \
@@ -47,6 +47,7 @@ jobs:
         with:
           ref: ${{needs.copy_deploy.outputs.release-sha}}
       - run: |
+          echo ${{needs.copy_deploy.outputs.release-sha}}
           date > generated.txt
           git config user.name github-actions
           git config user.email github-actions@github.com
