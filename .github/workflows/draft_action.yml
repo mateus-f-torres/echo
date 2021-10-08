@@ -19,7 +19,9 @@ jobs:
             --header 'Accept: application/vnd.github.v3+json' \
             --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' | jq '.object.sha' > sha.txt
-          echo "::set-output name=sha::$(cat sha.txt)"
+          test $(cat sha.txt) \
+            && echo "::set-output name=sha::$(cat sha.txt)" \
+            || echo "::error::Failed to get HEAD SHA1" && exit 1
 
       - name: Create Weekly Release Branch
         id: release-sha
