@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: peterjgrainger/action-create-branch@v2.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.AUTOMATION_TOKEN }}
         with:
           branch: "sprint/$(date +%y-%m-%d)"
 
