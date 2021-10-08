@@ -45,7 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ needs.copy_deploy.outputs.release-sha }}
+          ref: ${{ fromJSON(needs.copy_deploy.outputs.release-sha) }}
       - run: |
           echo ${{ needs.copy_deploy.outputs.release-sha }}
           date > generated.txt
