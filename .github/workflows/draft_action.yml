@@ -8,6 +8,7 @@ on:
 
 jobs:
   draft_action:
+    if: "${{ startsWith(github.event.pull_request.head.ref, 'master') == false }}"
     name: PR Review
     runs-on: ubuntu-latest
     steps:
