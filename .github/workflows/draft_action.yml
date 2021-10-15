@@ -6,6 +6,9 @@ on:
     branches:
       - master
 
+env:
+  branch: $(echo "deploy/$(date --date='next wednesday' +%y-%m-%d)")
+
 jobs:
   draft_action:
     name: PR Review
@@ -15,6 +18,8 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+      - name: Env
+        run: echo ${{ env.branch }}
       - name: Check Event
         run: |
           git show
