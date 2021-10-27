@@ -47,7 +47,6 @@ jobs:
     outputs:
       pwa_pr: ${{ steps.open-pr.outputs.url }}
     runs-on: ubuntu-latest
-    if: ${{ needs.pwa_copy_deploy.outputs.release-created == true }}
     steps:
       - name: Checkout Release
         uses: actions/checkout@v2
@@ -56,6 +55,8 @@ jobs:
 
       - name: Enable QA Envs
         run: |
+          echo "${{ needs.pwa_copy_deploy.outputs.release-created }}"
+        
           sed -i 's/# \(.*=\(benjaminabrahao\)\)$/\1/g' deploy_hooks/hosts_qa.ini
           git config user.name github-actions
           git config user.email github-actions@github.com
