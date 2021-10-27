@@ -52,8 +52,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: "criticalmassbr/dialog-pwa"
-          token: ${{ secrets.AUTOMATION_TOKEN }}
-          path: dialog-pwa
+          token: ${{ secrets.TOKEN }}
           ref: ${{ env.weekly_release }}
 
       - name: Enable QA Envs
