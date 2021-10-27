@@ -1,23 +1,258 @@
 name: Draft Action
 
+env:
+  weekly_branch: $(echo "deploy/$(date +%y-%m-%d)")
+  weekly_release: ci/automated-branch
+
 on:
   workflow_dispatch:
-  pull_request:
-    branches:
-      - master
 
 jobs:
-  draft_action:
-    name: PR Review
+  pwa_copy_deploy:
+    name: Copy Deploy to Release
+    runs-on: ubuntu-latest
+    outputs:
+      release-created: ${{ steps.release-branch.outputs.ok }}
+    steps:
+      - name: Get Deploy SHA1
+        id: deploy-sha
+        run: |
+          curl --fail --request GET "https://api.github.com/repos/criticalmassbr/dialog-pwa/git/ref/heads/${{ env.weekly_branch }}" \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Content-Type: application/json' | jq '.object.sha' > sha.txt
+          echo "::set-output name=sha::$(cat sha.txt)"
+
+      - name: Create Weekly Release Branch
+        id: release-branch
+        run: |
+          data=$(cat <<EOF
+          {
+            "ref": "refs/heads/${{ env.weekly_release }}",
+            "sha": ${{ steps.deploy-sha.outputs.sha }}
+          }
+          EOF
+          )
+
+          curl --fail --request POST 'https://api.github.com/repos/criticalmassbr/dialog-pwa/git/refs' \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Content-Type: application/json' \
+            --data "$data"
+          echo "::set-output name=ok::true"
+
+  pwa_release_pr:
+    needs: pwa_copy_deploy
+    name: Create Release Pull Request
+    outputs:
+      pwa_pr: ${{ steps.open-pr.outputs.url }}
+    runs-on: ubuntu-latest
+    if: ${{ needs.pwa_copy_deploy.outputs.release-created == true }}
+    steps:
+      - name: Checkout Release
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.weekly_release }}
+
+      - name: Enable QA Envs
+        run: |
+          sed -i 's/# \(.*=\(benjaminabrahao\)\)$/\1/g' deploy_hooks/hosts_qa.ini
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add deploy_hooks/hosts_qa.ini
+          git commit -m "chore: setup QA envs"
+          git push
+
+      - name: Open Pull Request
+        id: open-pr
+        run: |
+          data=$(cat <<EOF
+          {
+            "title": "${{ env.weekly_release }}",
+            "head": "${{ env.weekly_release }}",
+            "base": "master"
+          }
+          EOF
+          )
+
+          curl --fail --request POST 'https://api.github.com/repos/criticalmassbr/dialog-pwa/pulls' \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Content-Type: application/json' \
+            --data "$data" | jq '.url' > url.txt
+          echo "::set-output name=url::$(cat url.txt)"
+
+  api_copy_deploy:
+    name: Copy Deploy to Release
+    runs-on: ubuntu-latest
+    outputs:
+      release-created: ${{ steps.release-branch.outputs.ok }}
+    steps:
+      - name: Get Deploy SHA1
+        id: deploy-sha
+        run: |
+          curl --fail --request GET "https://api.github.com/repos/criticalmassbr/dialog-api/git/ref/heads/${{ env.weekly_branch }}" \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Content-Type: application/json' | jq '.object.sha' > sha.txt
+          echo "::set-output name=sha::$(cat sha.txt)"
+
+      - name: Create Weekly Release Branch
+        id: release-branch
+        run: |
+          data=$(cat <<EOF
+          {
+            "ref": "refs/heads/${{ env.weekly_release }}",
+            "sha": ${{ steps.deploy-sha.outputs.sha }}
+          }
+          EOF
+          )
+
+          curl --fail --request POST 'https://api.github.com/repos/criticalmassbr/dialog-api/git/refs' \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Content-Type: application/json' \
+            --data "$data"
+          echo "::set-output name=ok::true"
+
+  api_release_pr:
+    needs: api_copy_deploy
+    name: Create Release Pull Request
+    outputs:
+      api_pr: ${{ steps.open-pr.outputs.url }}
+    runs-on: ubuntu-latest
+    if: ${{ needs.api_copy_deploy.outputs.release-created == true }}
+    steps:
+      - name: Checkout Release
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.weekly_release }}
+
+      - name: Enable QA Envs
+        run: |
+          sed -i 's/# \(.*=\(benjaminabrahao\)\)$/\1/g' deploy_hooks/hosts_qa.ini
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add deploy_hooks/hosts_qa.ini
+          git commit -m "chore: setup QA envs"
+          git push
+
+      - name: Open Pull Request
+        id: open-pr
+        run: |
+          data=$(cat <<EOF
+          {
+            "title": "${{ env.weekly_release }}",
+            "head": "${{ env.weekly_release }}",
+            "base": "master"
+          }
+          EOF
+          )
+
+          curl --fail --request POST 'https://api.github.com/repos/criticalmassbr/dialog-api/pulls' \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Content-Type: application/json' \
+            --data "$data" | jq '.url' > url.txt
+          echo "::set-output name=url::$(cat url.txt)"
+
+  adm_copy_deploy:
+    name: Copy Deploy to Release
+    runs-on: ubuntu-latest
+    outputs:
+      release-created: ${{ steps.release-branch.outputs.ok }}
+    steps:
+      - name: Get Deploy SHA1
+        id: deploy-sha
+        run: |
+          curl --fail --request GET "https://api.github.com/repos/criticalmassbr/dialog-admin/git/ref/heads/${{ env.weekly_branch }}" \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Content-Type: application/json' | jq '.object.sha' > sha.txt
+          echo "::set-output name=sha::$(cat sha.txt)"
+
+      - name: Create Weekly Release Branch
+        id: release-branch
+        run: |
+          data=$(cat <<EOF
+          {
+            "ref": "refs/heads/${{ env.weekly_release }}",
+            "sha": ${{ steps.deploy-sha.outputs.sha }}
+          }
+          EOF
+          )
+
+          curl --fail --request POST 'https://api.github.com/repos/criticalmassbr/dialog-admin/git/refs' \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Content-Type: application/json' \
+            --data "$data"
+          echo "::set-output name=ok::true"
+
+  adm_release_pr:
+    needs: adm_copy_deploy
+    name: Create Release Pull Request
+    outputs:
+      adm_pr: ${{ steps.open-pr.outputs.url }}
+    runs-on: ubuntu-latest
+    if: ${{ needs.adm_copy_deploy.outputs.release-created == true }}
+    steps:
+      - name: Checkout Release
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.weekly_release }}
+
+      - name: Enable QA Envs
+        run: |
+          sed -i 's/# \(.*=\(benjaminabrahao\)\)$/\1/g' deploy_hooks/hosts_qa.ini
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add deploy_hooks/hosts_qa.ini
+          git commit -m "chore: setup QA envs"
+          git push
+
+      - name: Open Pull Request
+        id: open-pr
+        run: |
+          data=$(cat <<EOF
+          {
+            "title": "${{ env.weekly_release }}",
+            "head": "${{ env.weekly_release }}",
+            "base": "master"
+          }
+          EOF
+          )
+
+          curl --fail --request POST 'https://api.github.com/repos/criticalmassbr/dialog-admin/pulls' \
+            --header 'Accept: application/vnd.github.v3+json' \
+            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Content-Type: application/json' \
+            --data "$data" | jq '.url' > url.txt
+          echo "::set-output name=url::$(cat url.txt)"
+
+  slack_weekly_release:
+    needs: [pwa_release_pr, api_release_pr, adm_release_pr]
+    name: Notify Team on Slack
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
-      - name: Check Event
+      - name: POST to Slack Workflow
         run: |
-          git show
-          echo "${{ toJson(github) }}"
+
+          data=$(cat <<EOF
+          {
+           "base": "${{ env.weekly_branch }}",
+           "head": "${{ env.weekly_release }}",
+           "pwa": "${{ needs.pwa_release_pr.outputs.pwa_pr }}",
+           "api": "${{ needs.api_release_pr.outputs.api_pr }}",
+           "adm": "${{ needs.adm_release_pr.outputs.adm_pr }}"
+          }
+          EOF
+          )
+
+
+          curl --fail --request POST 'https://hooks.slack.com/workflows/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' \
+            --header 'Content-Type: text/plain' \
+            --data "$data"
+
 
       
