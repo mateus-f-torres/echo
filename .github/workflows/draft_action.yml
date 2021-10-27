@@ -249,11 +249,6 @@ jobs:
           }
           EOF
           )
-
-
-          curl --fail --request POST 'https://hooks.slack.com/workflows/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' \
-            --header 'Content-Type: text/plain' \
-            --data "$data"
-
-
+          
+          echo $data
       
