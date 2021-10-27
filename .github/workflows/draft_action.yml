@@ -59,7 +59,7 @@ jobs:
         run: |
           echo "${{ needs.pwa_copy_deploy.outputs.release-created }}"
         
-          sed -i 's/# \(.*=\(benjaminabrahao\)\)$/\1/g' deploy_hooks/hosts_qa.ini
+          sed -i 's/# \(.*\(benjaminabrahao\)-qa.*\)$/\1/g' deploy_hooks/hosts_qa.ini
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add deploy_hooks/hosts_qa.ini
