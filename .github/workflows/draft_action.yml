@@ -51,6 +51,7 @@ jobs:
       - name: Checkout Release
         uses: actions/checkout@v2
         with:
+          repository: "criticalmassbr/dialog-pwa"
           ref: ${{ env.weekly_release }}
 
       - name: Enable QA Envs
@@ -127,6 +128,7 @@ jobs:
       - name: Checkout Release
         uses: actions/checkout@v2
         with:
+          repository: "criticalmassbr/dialog-api"
           ref: ${{ env.weekly_release }}
 
       - name: Enable QA Envs
@@ -201,6 +203,7 @@ jobs:
       - name: Checkout Release
         uses: actions/checkout@v2
         with:
+          repository: "criticalmassbr/dialog-admin"
           ref: ${{ env.weekly_release }}
 
       - name: Enable QA Envs
