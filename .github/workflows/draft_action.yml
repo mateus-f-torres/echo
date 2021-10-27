@@ -52,7 +52,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: "criticalmassbr/dialog-pwa"
-          token: ${{ secrets.GitHub_PAT }}
+          token: ${{ secrets.AUTOMATION_TOKEN }}
           path: dialog-pwa
           ref: ${{ env.weekly_release }}
 
