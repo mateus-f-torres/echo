@@ -19,7 +19,7 @@ jobs:
         run: |
           curl --fail --request GET "https://api.github.com/repos/criticalmassbr/dialog-pwa/git/ref/heads/${{ env.weekly_branch }}" \
             --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' | jq '.object.sha' > sha.txt
           echo "::set-output name=sha::$(cat sha.txt)"
 
@@ -36,7 +36,7 @@ jobs:
 
           curl --fail --request POST 'https://api.github.com/repos/criticalmassbr/dialog-pwa/git/refs' \
             --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' \
             --data "$data"
           echo "::set-output name=ok::true"
@@ -77,7 +77,7 @@ jobs:
 
           curl --fail --request POST 'https://api.github.com/repos/criticalmassbr/dialog-pwa/pulls' \
             --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' \
             --data "$data" | jq '.url' > url.txt
           echo "::set-output name=url::$(cat url.txt)"
@@ -93,7 +93,7 @@ jobs:
         run: |
           curl --fail --request GET "https://api.github.com/repos/criticalmassbr/dialog-api/git/ref/heads/${{ env.weekly_branch }}" \
             --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' | jq '.object.sha' > sha.txt
           echo "::set-output name=sha::$(cat sha.txt)"
 
@@ -110,7 +110,7 @@ jobs:
 
           curl --fail --request POST 'https://api.github.com/repos/criticalmassbr/dialog-api/git/refs' \
             --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' \
             --data "$data"
           echo "::set-output name=ok::true"
@@ -151,7 +151,7 @@ jobs:
 
           curl --fail --request POST 'https://api.github.com/repos/criticalmassbr/dialog-api/pulls' \
             --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' \
             --data "$data" | jq '.url' > url.txt
           echo "::set-output name=url::$(cat url.txt)"
@@ -167,7 +167,7 @@ jobs:
         run: |
           curl --fail --request GET "https://api.github.com/repos/criticalmassbr/dialog-admin/git/ref/heads/${{ env.weekly_branch }}" \
             --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' | jq '.object.sha' > sha.txt
           echo "::set-output name=sha::$(cat sha.txt)"
 
@@ -184,7 +184,7 @@ jobs:
 
           curl --fail --request POST 'https://api.github.com/repos/criticalmassbr/dialog-admin/git/refs' \
             --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' \
             --data "$data"
           echo "::set-output name=ok::true"
@@ -225,7 +225,7 @@ jobs:
 
           curl --fail --request POST 'https://api.github.com/repos/criticalmassbr/dialog-admin/pulls' \
             --header 'Accept: application/vnd.github.v3+json' \
-            --header 'Authorization: ${{ secrets.CRITICAL_TOKEN }}' \
+            --header 'Authorization: ${{ secrets.AUTOMATION_TOKEN }}' \
             --header 'Content-Type: application/json' \
             --data "$data" | jq '.url' > url.txt
           echo "::set-output name=url::$(cat url.txt)"
