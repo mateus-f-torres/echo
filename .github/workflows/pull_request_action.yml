@@ -1,4 +1,4 @@
-name: Draft Action
+name: Pull Request Action
 
 on:
   workflow_dispatch:
@@ -7,8 +7,8 @@ on:
       - master
 
 jobs:
-  draft_action:
-    name: PR Review
+  pull_request_action:
+    name: Pull Request Action
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,8 +16,6 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
       - name: Check Event
-        run: |
-          git show
-          echo "${{ toJson(github) }}"
+        run: "echo '${{ toJson(github) }}'"
 
-      
+
